@@ -35,8 +35,15 @@ module.exports = {
     },
 
     // Rest error messages
-    errors: {
+    messages: {
 	empty: 'The field is empty',
-        wrong: 'Wrong type'
+        wrong: 'Wrong type', 
+	appError: 'Application error',
+	editUser: 'User edit error',
+	notFound: 'Not found',
+        done: 'Done',
+        fail: 'Failed',
+        notAllowed: 'Type not allowed',
+        notAuthorized: 'Not Authorized'
     }
 };

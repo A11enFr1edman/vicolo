@@ -28,9 +28,9 @@ function route (app) {
     // (TODO: DIFFERENCE FOR EACH TYPE) 
     app.post('/dns/record/new', utils.accesslog, utils.restricted, function(req, res) {
         // Sanitize and check the form
-        req.assert('domain', params.errors.empty).notEmpty();
-        req.assert('type', params.errors.wrong).isNumeric();
-        req.assert('name', params.errors.wrong).isAlphanumeric();
+        req.assert('domain', params.messages.empty).notEmpty();
+        req.assert('type', params.messages.wrong).isNumeric();
+        req.assert('name', params.messages.wrong).isAlphanumeric();
         // No space or special character at the end or start of the line
         req.sanitize('domain').trim(' ');
         req.sanitize('type').toInt(); // Sanitize to int for database storing
@@ -38,15 +38,15 @@ function route (app) {
         
         // Check and sanitize for each type
         if (req.body.type == 1) {
-            req.assert('address', params.errors.empty).notEmpty();
+            req.assert('address', params.messages.empty).notEmpty();
         }
         if (req.body.type == 15) {
-            req.assert('exchange', params.errors.empty).notEmpty();
-            req.assert('priority', params.errors.wrong).isNumeric();
+            req.assert('exchange', params.messages.empty).notEmpty();
+            req.assert('priority', params.messages.wrong).isNumeric();
             req.sanitize('priority').toInt(); // Sanitize to int for database storing
         }
         if (req.body.type == 16) {
-            req.assert('data', params.errors.empty).notEmpty();
+            req.assert('data', params.messages.empty).notEmpty();
         }
         // Get errors as object (without true it give errors as array of object)
         // NOTE: ERRORS is an array of objects
@@ -86,13 +86,13 @@ function route (app) {
                 // store in mongodb
                 dnsClass.insert(record, function (results) {
                     if (results[0]) {
-                        res.json({method: req.url, message: "OK"});
+                        res.json({method: req.url, message: params.messages.done});
                     } else {
-                        res.json({method: req.url, message: "Insert fails"});                    
+                        res.json({method: req.url, message: params.messages.fail});                    
                     }
                 });
             } else {
-                res.json({method: req.url, message: "Type not allowed"});
+                res.json({method: req.url, message: params.messages.notAllowed});
             }
 	}
     });
